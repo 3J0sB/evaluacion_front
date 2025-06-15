@@ -29,7 +29,7 @@ function Home() {
     fetchBooks();
   }, []);
   return (
-    <div>
+    <div className='bg-gray-100 min-h-screen'>
       <Header/>
       <BookCollection books = {books} title={"Explora nuestra colección"}/>
     </div>

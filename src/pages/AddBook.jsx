@@ -7,7 +7,7 @@ import Header from '../components/layout/header';
 
 const AddBook = () => {
     return (
-        <div>
+        <div className='bg-gray-100 min-h-screen'>
             <Header />
             <div className="container mx-auto px-4 py-8">
 

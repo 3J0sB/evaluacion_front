@@ -6,32 +6,31 @@ const AddBookCopyForm = () => {
     const [selectedBookId, setSelectedBookId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [fetchingBooks, setFetchingBooks] = useState(true);
+    
+    const fetchBooks = async () => {
+        try {
+            const response = await fetch('http://localhost:8085/api/book/all', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
+            if (!response.ok) {
+                throw new Error('Error al cargar los libros');
+            }
+
+            const data = await response.json();
+            setBooks(data);
+        } catch (error) {
+            console.error('Error fetching books:', error);
+            toast.error('No se pudieron cargar los libros. Intente nuevamente.');
+        } finally {
+            setFetchingBooks(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchBooks = async () => {
-            try {
-                const response = await fetch('http://localhost:8085/api/book/all', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Error al cargar los libros');
-                }
-
-                const data = await response.json();
-                setBooks(data);
-            } catch (error) {
-                console.error('Error fetching books:', error);
-                toast.error('No se pudieron cargar los libros. Intente nuevamente.');
-            } finally {
-                setFetchingBooks(false);
-            }
-        };
-
         fetchBooks();
     }, []);
 
@@ -43,7 +42,7 @@ const AddBookCopyForm = () => {
 
             const bookCopy = {
                 book_fk: parseInt(selectedBookId),
-                state: true 
+                state: true
             };
             console.log('Creating book copy:', bookCopy);
             const response = await fetch('http://localhost:8085/copyBook', {
@@ -78,7 +77,7 @@ const AddBookCopyForm = () => {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Agregar Copia de Libro</h2>
 
             {fetchingBooks ? (
@@ -125,7 +124,7 @@ const AddBookCopyForm = () => {
                         </div>
                     )}
 
-                    <div className="pt-4">
+                    <div className="pt-2">
                         <button
                             type="submit"
                             disabled={loading || !selectedBookId}
