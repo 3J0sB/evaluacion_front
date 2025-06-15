@@ -60,6 +60,7 @@ const AddBookCopyForm = () => {
             }
 
             const savedCopy = await response.json();
+            console.log('Copia de libro guardada:', savedCopy);
             toast.success('¡Copia de libro creada exitosamente!');
 
 
