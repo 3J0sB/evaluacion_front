@@ -11,15 +11,52 @@ import About from "./pages/About.jsx";
 import Login from "./pages/Login.jsx";
 import MyBookings from "./pages/MyBookings.jsx";
 import AuthContextProvider from "./store/auth-context.jsx";
+import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
+
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
-  { path: "/new-book", element: <AddBook /> },
-  { path: "/prestamo", element: <Booking /> },
-  { path: "/devolucion", element: <ReturnBook /> },
-  { path: "/lector", element: <Reader /> },
+  {
+    path: "/new-book",
+    element: (
+      <ProtectedRoute allowedRoles={["ADMIN"]}>
+        <AddBook />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/prestamo",
+    element: (
+      <ProtectedRoute allowedRoles={["ADMIN"]}>
+        <Booking />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/devolucion",
+    element: (
+      <ProtectedRoute allowedRoles={["ADMIN"]}>
+        <ReturnBook />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/lector",
+    element: (
+      <ProtectedRoute allowedRoles={["ADMIN"]}>
+        <Reader />
+      </ProtectedRoute>
+    ),
+  },
   { path: "/about", element: <About /> },
   { path: "/login", element: <Login /> },
-  { path: "/my-bookings", element: <MyBookings /> }
+  {
+    path: "/my-bookings",
+    element: (
+      <ProtectedRoute allowedRoles={["USER"]}>
+        <MyBookings />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
