@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { formatDate } from '../../lib';
 
 const ReturnBookForm = () => {
@@ -21,7 +21,13 @@ const ReturnBookForm = () => {
 
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:8085/api/booking/email/${email}`);
+            const res = await fetch(`http://localhost:8085/api/booking/email/${email}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             if (!res.ok) throw new Error('No se pudieron obtener los préstamos');
             const data = await res.json();
             console.log(data);
@@ -46,11 +52,22 @@ const ReturnBookForm = () => {
         try {
             const res = await fetch(`http://localhost:8085/api/booking/${selectedBooking.id_booking}/return`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')
+
+                        }`
+                }
             });
             if (!res.ok) throw new Error('No se pudo devolver el libro');
             setMessage({ type: 'success', text: '¡Libro devuelto exitosamente!' });
-            setBookings(bookings.filter(b => b.id_booking !== selectedBooking.id_booking));
+            setBookings(
+                bookings.map(b =>
+                    b.id_booking === selectedBooking.id_booking
+                        ? { ...b, state: false }
+                        : b
+                )
+            );
             setSelectedBooking(null);
         } catch (err) {
             setMessage({ type: 'error', text: err.message });
@@ -79,7 +96,7 @@ const ReturnBookForm = () => {
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 />
                 <button
-                    type="submit"
+                    type="submit"   
                     disabled={loading}
                     className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-md transition-colors"
                 >

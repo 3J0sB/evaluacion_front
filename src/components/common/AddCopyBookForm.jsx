@@ -13,6 +13,7 @@ const AddBookCopyForm = () => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+
                 }
             });
 
@@ -45,10 +46,11 @@ const AddBookCopyForm = () => {
                 state: true
             };
             console.log('Creating book copy:', bookCopy);
-            const response = await fetch('http://localhost:8085/copyBook', {
+            const response = await fetch('http://localhost:8085/api/copyBook/new', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(bookCopy)
             });

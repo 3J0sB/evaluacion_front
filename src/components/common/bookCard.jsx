@@ -6,7 +6,6 @@ const BookCard = ({ book }) => {
 
     return (
         <div className="bg-white rounded shadow hover:shadow-lg transition-shadow">
-            <Link to={`/book/${id}`}>
                 <div className="overflow-hidden h-48">
                     <img
                         src={coverImage || 'img/miau.jpg'}
@@ -25,7 +24,6 @@ const BookCard = ({ book }) => {
                     </div>
 
                 </div>
-            </Link>
         </div>
     );
 };

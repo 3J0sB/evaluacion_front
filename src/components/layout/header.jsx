@@ -1,7 +1,53 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../store/auth-context.jsx';
+import { jwtDecode } from 'jwt-decode';
 
 const Header = () => {
+
+  const routes = [];
+  routes.push({ to: '/', label: 'Home' });
+  routes.push({ to: '/about', label: 'About' });
+  routes.push({ to: '/new-book', label: 'Agregar libro' });
+  routes.push({ to: '/prestamo', label: 'Préstamo' });
+  routes.push({ to: '/devolucion', label: 'Devolución' });
+  routes.push({ to: '/lector', label: 'Lector' });
+  routes.push({ to: '/my-bookings', label: 'Mis reservas' });
+
+  const contexto = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  let token;
+  if (contexto.token) {
+    const decodeToken = jwtDecode(contexto.token);
+    if(decodeToken.sub.includes('USER')){
+      routes.splice(0, routes.length);
+      routes.push({ to: '/', label: 'Home' });
+      routes.push({ to: '/about', label: 'About' });
+      routes.push({ to: '/my-bookings', label: 'Mis reservas' });
+    }else if(decodeToken.sub.includes('ADMIN')){
+      routes.splice(0, routes.length);
+      routes.push({ to: '/', label: 'Home' });
+      routes.push({ to: '/about', label: 'About' });
+      routes.push({ to: '/new-book', label: 'Agregar libro' });
+      routes.push({ to: '/prestamo', label: 'Préstamo' });
+      routes.push({ to: '/devolucion', label: 'Devolución' });
+      routes.push({ to: '/lector', label: 'Lector' });
+    }
+  }else{
+      routes.splice(0, routes.length);
+      routes.push({ to: '/', label: 'Home' });
+      routes.push({ to: '/about', label: 'About' });
+      routes.push({ to: '/login', label: 'Iniciar Sesión' });
+  }
+
+
+  const handleLogout = () => {
+    contexto.logout();
+    navigate('/login');
+  };
+
   return (
     <header className="bg-slate-700 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -10,30 +56,24 @@ const Header = () => {
             Book<span className="text-red-500">Hub</span>
           </Link>
         </div>
-        <nav>
-          <ul className="flex space-x-6">
-            <li>
-              <Link to="/" className="hover:text-gray-300">Home</Link>
-            </li>
-            <li>
-              <Link to="/about" className="hover:text-gray-300">About</Link>
-            </li>
-            <li>
-              <Link to="/new-book" className="hover:text-gray-300">Agregar libro</Link>
-            </li>
-            <li>
-              <Link to="/prestamo" className="hover:text-gray-300">Préstamo</Link>
-            </li>
-            <li>
-              <Link to="/devolucion" className="hover:text-gray-300">Devolución</Link>
-            </li>
-            <li>
-              <Link to="/lector" className="hover:text-gray-300">Lector</Link>
-            </li>
-            <li>
-              <Link to="/salir" className="hover:text-gray-300">Salir</Link>
-            </li>
-          </ul>
+        <nav className="flex gap-6 justify-center items-center">
+          {routes.map(route => (
+            <Link
+              key={route.to}
+              to={route.to}
+              className="text-white hover:text-red-400 transition font-medium"
+            >
+              {route.label}
+            </Link>
+          ))}
+          {contexto.token ? (
+            <button
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-semibold shadow"
+              onClick={handleLogout}
+            >
+              SALIR
+            </button>
+          ) : null}
         </nav>
       </div>
     </header>

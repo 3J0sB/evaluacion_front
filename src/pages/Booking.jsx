@@ -33,7 +33,9 @@ function Booking() {
     return (
         <div className='bg-gray-100 min-h-screen'>
             <Header />
-            <BookingForm  />
+            <div className='mt-16'>
+                <BookingForm />
+            </div>
         </div>
 
     )

@@ -43,10 +43,11 @@ const AddBookForm = () => {
 
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8085/api/book', {
+            const response = await fetch('http://localhost:8085/api/book/new', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(book)
             });
@@ -123,12 +124,12 @@ const AddBookForm = () => {
                         required
                     >
                         <option value="">Selecciona un tipo</option>
-                        <option value="Fiction">Ficción</option>
-                        <option value="Non-Fiction">No Ficción</option>
-                        <option value="Fantasy">Fantasía</option>
-                        <option value="Science Fiction">Ciencia Ficción</option>
-                        <option value="Mystery">Misterio</option>
-                        <option value="Biography">Biografía</option>
+                        <option value="Ficción">Ficción</option>
+                        <option value="Realidad">Realidad</option>
+                        <option value="Fantasía">Fantasía</option>
+                        <option value="Ciencia Ficción">Ciencia Ficción</option>
+                        <option value="Misterio">Misterio</option>
+                        <option value="Biografía">Biografía</option>
                     </select>
                 </div>
 

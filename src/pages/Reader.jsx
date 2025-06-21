@@ -33,7 +33,13 @@ function Reader() {
         setLoading(true);
         setUser(null);
         try {
-            const res = await fetch(`http://localhost:8085/api/user/email/${email.trim()}`);
+            const res = await fetch(`http://localhost:8085/api/user/email/${email.trim()}`,{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             const data = await res.json();
             setUser(data);
         } catch (err) {

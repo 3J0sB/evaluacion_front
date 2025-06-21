@@ -20,10 +20,11 @@ const BookingForm = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8085/copyBook/${searchTitle}`, {
+      const response = await fetch(`http://localhost:8085/api/copyBook/${searchTitle}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
 
@@ -65,7 +66,7 @@ const BookingForm = () => {
    
       const loanData = {
         copybook_fk: selectedCopy.id_copybook,
-        date_booking: new Date().toISOString(), 
+date_booking: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19),
         date_return: '',
         state: true,
         user_fk: userEmail
@@ -76,6 +77,7 @@ const BookingForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify(loanData)
       });
@@ -84,10 +86,11 @@ const BookingForm = () => {
         console.error('Error creating loan:', response.statusText);
         throw new Error('Error al crear el préstamo');
       }else{
-        const  copyBookState = await fetch(`http://localhost:8085/copyBook/${loanData.copybook_fk}/disable`, {
+        const  copyBookState = await fetch(`http://localhost:8085/api/copyBook/${loanData.copybook_fk}/disable`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
         if (!copyBookState.ok) {
