@@ -40,6 +40,7 @@ const Header = () => {
       routes.push({ to: '/', label: 'Home' });
       routes.push({ to: '/about', label: 'About' });
       routes.push({ to: '/login', label: 'Iniciar Sesión' });
+      routes.push({ to: '/register', label: 'Registrarse' });
   }
 
 

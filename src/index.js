@@ -12,7 +12,7 @@ import Login from "./pages/Login.jsx";
 import MyBookings from "./pages/MyBookings.jsx";
 import AuthContextProvider from "./store/auth-context.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
-
+import Register from "./pages/Register.jsx";
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   {
@@ -49,6 +49,7 @@ const router = createBrowserRouter([
   },
   { path: "/about", element: <About /> },
   { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
   {
     path: "/my-bookings",
     element: (
