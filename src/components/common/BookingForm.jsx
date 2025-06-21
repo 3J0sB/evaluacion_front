@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import Booking from '../../pages/Booking';
+import { useState } from 'react';
+
 
 const BookingForm = () => {
-  // Estados para el formulario
   const [userEmail, setUserEmail] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
   const [availableBooks, setAvailableBooks] = useState([]);
@@ -11,7 +10,7 @@ const BookingForm = () => {
   const [selectedCopy, setSelectedCopy] = useState(null);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // Función para buscar libros disponibles
+
   const searchBooks = async (e) => {
     e.preventDefault();
     if (!searchTitle.trim()) {
@@ -21,8 +20,7 @@ const BookingForm = () => {
 
     try {
       setLoading(true);
-      // Usando el endpoint que proporcionaste
-      const response = await fetch(`http://localhost:8085/copyBook/${encodeURIComponent(searchTitle)}`, {
+      const response = await fetch(`http://localhost:8085/copyBook/${searchTitle}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +72,7 @@ const BookingForm = () => {
       };
       console.log('Creating loan with data:', loanData);
 
-      const response = await fetch('http://localhost:8085/booking/new', {
+      const response = await fetch('http://localhost:8085/api/booking/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,6 +83,18 @@ const BookingForm = () => {
       if (!response.ok) {
         console.error('Error creating loan:', response.statusText);
         throw new Error('Error al crear el préstamo');
+      }else{
+        const  copyBookState = await fetch(`http://localhost:8085/copyBook/${loanData.copybook_fk}/disable`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        if (!copyBookState.ok) {
+          throw new Error('Error al actualizar el estado de la copia del libro');
+        }
+        console.log('Estado de la copia del libro actualizado exitosamente');
+        setMessage({ type: 'success', text: '¡Préstamo creado exitosamente y estado de la copia actualizado!' });
       }
       
 
